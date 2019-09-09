@@ -10,6 +10,18 @@ async function run() {
 
     console.log(context);
 
+    if(labelName.localeCompare(context.payload.issue.label.name)){
+        // the label matches
+        console.log("the label matches: " + context.payload.label.name)
+
+        // This might fail since the card is already created?
+        await octokit.projects.createCard({
+            column_id: columnId,
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+        });
+    }
+
     return "Initial Testing";
 }
 
