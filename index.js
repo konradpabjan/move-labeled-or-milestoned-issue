@@ -13,7 +13,7 @@ async function run() {
     var found = false;
     context.payload.issue.labels.forEach(function(item){
         console.log(item.name)
-        if(labelName.localeCompare(item.name)){
+        if(labelName == item.name){
             // the label matches
             console.log("the label matches: " + labelName)
             found = true;
