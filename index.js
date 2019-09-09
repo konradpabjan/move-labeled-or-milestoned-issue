@@ -21,14 +21,23 @@ async function run() {
     })
 
     if(found){
-        console.log("creating a card for the issue");
-        // This might fail since the card is already created?
-        await octokit.projects.createCard({
-            column_id: columnId,
-            content_id: context.payload.issue.id,
-            content_type: "Issue"
-        });
+        try{
+            // This might fail since the card is already created?
+            await octokit.projects.createCard({
+                column_id: columnId,
+                content_id: context.payload.issue.id,
+                content_type: "Issue"
+            });
+        } catch (error) {
+            // fetch all of the columns for the project
+            var columnInformation = await octokit.projects.listColumns({
+                project_id: 3181121
+            });
+            console.log(columnInformation)
+        }
     }
+
+    octokit.projects.listCards()
 
     return "Initial Testing";
 }
