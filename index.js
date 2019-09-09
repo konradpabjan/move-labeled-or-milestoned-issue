@@ -10,9 +10,10 @@ async function run() {
 
     console.log(context);
 
-    if(labelName.localeCompare(context.payload.issue.label.name)){
+    if(context.payload.issue.labels.includes(labelName)){
         // the label matches
-        console.log("the label matches: " + context.payload.label.name)
+        console.log("the label matches: " + labelName)
+
 
         // This might fail since the card is already created?
         await octokit.projects.createCard({
