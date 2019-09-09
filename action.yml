@@ -1,0 +1,15 @@
+name: 'Move newly labeled issue to a specific column'
+description: 'Move a newly labeled issue to a specific column in a project'
+inputs:
+  repo-token:
+    description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
+    required: true
+  column-id:
+    description: 'The id of the column that we want issues with the label to show up in'
+    required: true
+  label-name:
+    description: 'The label that specifies if an issue should be automatically moved to the column'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'

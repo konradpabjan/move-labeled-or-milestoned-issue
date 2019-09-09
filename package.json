@@ -1,0 +1,23 @@
+{
+  "name": "actions-move-labeled-issue",
+  "version": "1.0.0",
+  "description": "Automatically move a newly labeled issue to a specific project column",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/konradpabjan/actions-move-labeled-issue.git"
+  },
+  "author": "konradpabjan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/konradpabjan/actions-move-labeled-issue/issues"
+  },
+  "homepage": "https://github.com/konradpabjan/actions-move-labeled-issue#readme",
+  "dependencies": {
+    "@actions/core": "^1.1.0",
+    "@actions/github": "^1.1.0"
+  }
+}
