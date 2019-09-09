@@ -11,7 +11,7 @@ async function run() {
     console.log(context.payload.issue.labels);
 
 
-    context.payload.issue.labels.forEach(function(label){
+    context.payload.issue.labels.forEach(await function(label){
         if(labelName.localeCompare(label.name)){
             // the label matches
             console.log("the label matches: " + labelName)
