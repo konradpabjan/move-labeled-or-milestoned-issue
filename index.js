@@ -10,20 +10,25 @@ async function run() {
 
     console.log(context.payload.issue.labels);
 
-
-    context.payload.issue.labels.forEach(async function(label){
-        if(labelName.localeCompare(label.name)){
+    var found = false;
+    context.payload.issue.labels.forEach(function(item){
+        console.log(item.name)
+        if(labelName.localeCompare(item.name)){
             // the label matches
             console.log("the label matches: " + labelName)
-
-            // This might fail since the card is already created?
-            await octokit.projects.createCard({
-                column_id: columnId,
-                content_id: context.payload.issue.id,
-                content_type: "Issue"
-            });
+            found = true;
         }
     })
+
+    if(found){
+        console.log("creating a card for the issue");
+        // This might fail since the card is already created?
+        await octokit.projects.createCard({
+            column_id: columnId,
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+        });
+    }
 
     return "Initial Testing";
 }
