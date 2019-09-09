@@ -8,7 +8,7 @@ async function run() {
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
-    console.log(context);
+    console.log(context.payload.issue.labels);
 
     if(context.payload.issue.labels.includes(labelName)){
         // the label matches
