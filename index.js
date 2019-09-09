@@ -10,18 +10,20 @@ async function run() {
 
     console.log(context.payload.issue.labels);
 
-    if(context.payload.issue.labels.includes(labelName)){
-        // the label matches
-        console.log("the label matches: " + labelName)
 
+    context.payload.issue.labels.forEach(function(label){
+        if(labelName.localeCompare(label.name)){
+            // the label matches
+            console.log("the label matches: " + labelName)
 
-        // This might fail since the card is already created?
-        await octokit.projects.createCard({
-            column_id: columnId,
-            content_id: context.payload.issue.id,
-            content_type: "Issue"
-        });
-    }
+            // This might fail since the card is already created?
+            await octokit.projects.createCard({
+                column_id: columnId,
+                content_id: context.payload.issue.id,
+                content_type: "Issue"
+            });
+        }
+    })
 
     return "Initial Testing";
 }
