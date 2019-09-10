@@ -4,9 +4,9 @@ const graphql = require('@octokit/graphql');
 
 async function run() {
     const myToken = core.getInput('repo-token');
+    const projectId = core.getInput('project-id');
     const columnId = core.getInput('column-id');
     const labelName = core.getInput('label-name');
-    const octokit = new github.GitHub(myToken);
     const context = github.context;
 
     console.log(context.payload.issue.labels);
@@ -36,7 +36,7 @@ async function run() {
             const response1  = await graphql(
                 `
                   {
-                    repository(owner:"bbq-beets", name:"konradpabjan-test") {
+                    repository($owner: String!, $repo: String!) {
                         issues(states:CLOSED) {
                           totalCount
                         }
@@ -44,8 +44,10 @@ async function run() {
                   } 
                 `,
                 {
+                  owner: 'bbq-beets',
+                  repo: 'konradpabjan-test',  
                   headers: {
-                    authorization: `bearer ${myToken}`
+                    Authorization: `bearer ${myToken}`
                   }
                 }
               );
@@ -66,12 +68,34 @@ async function run() {
                 `,
                 {
                   headers: {
-                    authorization: `bearer ${myToken}`
+                    Authorization: `bearer ${myToken}`
                   }
                 }
               );
 
             console.log(response2);
+
+            console.log("runing graphQL query #3");
+            const response3  = await graphql(
+                `
+                  {
+                    projects(id:"3181121") {
+                        columns() {
+                            id
+                        }
+                    }
+                  }
+                `,
+                {
+                  headers: {
+                    Authorization: `bearer ${myToken}`
+                  }
+                }
+              );
+
+            console.log(response3);
+
+
 
             
         } catch (error) {
