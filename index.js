@@ -66,47 +66,43 @@ async function moveCard(octokit, cardId, columnId){
 async function findCardId(token, projectId, repositoryOwner, repositoryName){
     // GraphQL query to get all of the cards in each column for a project
     // https://developer.github.com/v4/explorer/ is good to play around with 
-    const response  = await graphql(
-    `
-        {
-         repository(owner:$owner, name:$name) {
-           projects(first: 100) {
-             nodes {
-               databaseId
-               columns(first: 100) {
-                 edges {
-                   node {
-                     databaseId
-                     name
-                     cards {
-                       edges {
-                         node {
-                           databaseId
-                           content {
-                             ... on Issue {
-                               databaseId
-                               number
-                             }
-                           }
-                         }
-                       }
-                     }
-                   }
-                 }
-               }
-             }
-           }
-         }
-       }
-    `,
-    {
+    const response  = await graphql({
+        query: `{
+                    repository(owner:$owner, name:$name) { 
+                        projects(first: 100) {
+                            nodes {
+                                databaseId
+                                columns(first: 100) {
+                                        edges {
+                                            node {
+                                                databaseId
+                                                name
+                                                cards {
+                                                    edges {
+                                                        node {
+                                                        databaseId
+                                                        content {
+                                                            ... on Issue {
+                                                            databaseId
+                                                            number
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }        
+                }`,
         owner: `${repositoryOwner}`,
-        name: `${repositoryName}`
+        name: `${repositoryName}`,
         headers: {
-            authorization: `bearer ${token}`
+             authorization: `bearer ${token}`
         }
-    }
-    );
+    });
 
     var cardId = null;
     response.repository.projects.nodes.forEach(function(project){
