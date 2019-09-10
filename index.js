@@ -23,7 +23,7 @@ async function run() {
         var isCardCreated = await tryCreateCard(octokit, columnId, context.payload.issue.id);   
         if (isCardCreated == 0){
             // A card already exists, we must find the cardId and move it to the correct column
-            var cardId = await findCardId(myToken, projectId, repositoryOwner, repositoryName);
+            var cardId = await findCardId(myToken, projectId, repositoryOwner, repositoryName, context.payload.issue.id);
             if(cardId){
                 moveCard(octokit, cardId, columnId);
                 return `Sucesfully moved card #${cardId} to column #${columnId}`;
@@ -63,7 +63,7 @@ async function moveCard(octokit, cardId, columnId){
     })
 }
 
-async function findCardId(token, projectId, repositoryOwner, repositoryName){
+async function findCardId(token, projectId, repositoryOwner, repositoryName, issueId){
     // GraphQL query to get all of the cards in each column for a project
     // https://developer.github.com/v4/explorer/ is good to play around with 
     const response  = await graphql({
@@ -116,7 +116,7 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName){
                     // check if the issue databaseId matches the databaseId of the card content
                     if (card.node.content != null){
                         // only issues and pull requests have content
-                        if (card.node.content.databaseId == context.payload.issue.id){
+                        if (card.node.content.databaseId == issueId){
                             cardId = card.node.databaseId;
                         }
                     }
