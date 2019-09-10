@@ -1,5 +1,6 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
+const graphql = require('@octokit/graphql');
 
 async function run() {
     const myToken = core.getInput('repo-token');
@@ -23,17 +24,45 @@ async function run() {
     if(found){
         try{
             // This might fail since the card is already created?
+            /*
             await octokit.projects.createCard({
                 column_id: columnId,
                 content_id: context.payload.issue.id,
                 content_type: "Issue"
             });
+            */
+
+            console.log("runing graphQL query");
+            const repository  = await graphql(
+                `
+                  {
+                    repository(owner:"bbq-beets", name:"konradpabjan-test") {
+                        issues(states:CLOSED) {
+                          totalCount
+                        }
+                      }
+                  }
+                `,
+                {
+                  headers: {
+                    authorization: `token ${myToken}`
+                  }
+                }
+              );
+
+            console.log(repository);
+
+            
         } catch (error) {
+            /*
             // fetch all of the columns for the project
             var columnInformation = await octokit.projects.listColumns({
                 project_id: 3181121
             });
             console.log(columnInformation)
+            // we're going to have to get all the columns in 
+            columnInformation.data.forEach(function )
+            */
         }
     }
 
