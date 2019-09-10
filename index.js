@@ -33,25 +33,21 @@ async function run() {
             */
 
             console.log("runing graphQL query #1");
-            const response1  = await graphql(
-                `
-                  {
-                    repository($owner: String!, $repo: String!) {
-                        issues(states:CLOSED) {
-                          totalCount
-                        }
-                      }
-                  } 
+            const response1  = await graphql({
+                query: `{ 
+                            repository($owner: String!, $repo: String!) {
+                                issues(states:CLOSED) {
+                                    totalCount
+                                }
+                            }
+                        } 
                 `,
-                {
                   owner: 'bbq-beets',
                   repo: 'konradpabjan-test',  
                   headers: {
                     Authorization: `bearer ${myToken}`
                   }
-                }
-              );
-
+            })
             
             console.log(response1);
 
@@ -111,8 +107,6 @@ async function run() {
             */
         }
     }
-
-    octokit.projects.listCards()
 
     return "Initial Testing";
 }
