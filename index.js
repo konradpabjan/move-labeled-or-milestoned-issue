@@ -35,6 +35,8 @@ async function run() {
             // for now assume that a card already exists for the issues
             // query for all of the cards in the project and get the card id of the issue
 
+            console.log("we are going to be looking for the card with ID#:  " +context.payload.issue.id);
+
            console.log("runing graphQL query to find all of the cards in a project");
            const response  = await graphql(
                `
@@ -77,6 +79,19 @@ async function run() {
              );
 
             console.log(response);
+
+            var columns = response.repository.projects.nodes.forEach(function(project){
+                // we are at the project level
+                console.log(project.columns)
+                item.columns.edges.forEach(function(column){
+                    // column level
+                    console.log(column);
+                    column.node.cards.edges.forEach(function(card){
+                        // card level
+                        console.log(card);
+                    });
+                });
+            })
 
 
 
