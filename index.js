@@ -32,8 +32,8 @@ async function run() {
             });
             */
 
-            console.log("runing graphQL query");
-            const repository  = await graphql(
+            console.log("runing graphQL query #1");
+            const response1  = await graphql(
                 `
                   {
                     repository(owner:"bbq-beets", name:"konradpabjan-test") {
@@ -45,12 +45,27 @@ async function run() {
                 `,
                 {
                   headers: {
-                    authorization: `token ${myToken}`
+                    authorization: myToken
                   }
                 }
               );
 
-            console.log(repository);
+            console.log(response1);
+
+            console.log("runing graphQL query #2");
+            const response2  = await graphql(
+                `
+                  {
+                    repository(owner:"konradpabjan", name:"Testing2") {
+                        issues(states:CLOSED) {
+                          totalCount
+                        }
+                      }
+                  }
+                `
+              );
+
+            console.log(response2);
 
             
         } catch (error) {
