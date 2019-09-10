@@ -94,9 +94,12 @@ async function run() {
 
                         // check if the issue databaseId matches the databaseId of the card content
                         console.log(card.node.content.databaseId )
-                        if (card.node.content.databaseId == context.payload.issue.id){
-                            console.log("We have a match!!");
-                            cardId = card.node.databaseId;
+                        if (card.node.content){
+                            // only issues and pull requests have content
+                            if (card.node.content.databaseId == context.payload.issue.id){
+                                console.log("We have a match!!");
+                                cardId = card.node.databaseId;
+                            }
                         }
                     });
                 });
