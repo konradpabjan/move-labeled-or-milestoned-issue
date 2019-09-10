@@ -69,7 +69,7 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName){
     const response  = await graphql(
     `
         {
-         repository(owner: ${repositoryOwner}, name: ${repositoryName}) {
+         repository(owner:$owner, name:$name) {
            projects(first: 100) {
              nodes {
                databaseId
@@ -100,8 +100,10 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName){
        }
     `,
     {
+        owner: `${repositoryOwner}`,
+        name: `${repositoryName}`
         headers: {
-        authorization: `bearer ${token}`
+            authorization: `bearer ${token}`
         }
     }
     );
