@@ -68,7 +68,7 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName){
     // https://developer.github.com/v4/explorer/ is good to play around with 
     const response  = await graphql({
         query: `{
-                    repository(owner:${repositoryOwner}, name:${repositoryName}) { 
+                    repository(owner:"${repositoryOwner}", name:"${repositoryName}") { 
                         projects(first: 100) {
                             nodes {
                                 databaseId
