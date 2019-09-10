@@ -32,16 +32,42 @@ async function run() {
             });cls
             */
 
-           console.log("runing graphQL query #3");
-           const response3  = await graphql(
+            // for now assume that a card already exists for the issues
+            // query for all of the cards in the project and get the card id of the issue
+
+           console.log("runing graphQL query to find all of the cards in a project");
+           const response  = await graphql(
                `
-                 {
-                   projects(id:"3181121") {
-                       columns {
-                           id
-                       }
-                   }
-                 }
+               {
+                repository(owner: "bbq-beets", name: "konradpabjan-test") {
+                  projects(first: 100) {
+                    nodes {
+                      databaseId
+                      columns(first: 100) {
+                        edges {
+                          node {
+                            databaseId
+                            name
+                            cards {
+                              edges {
+                                node {
+                                  databaseId
+                                  content {
+                                    ... on Issue {
+                                      databaseId
+                                      number
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
                `,
                {
                  headers: {
@@ -50,28 +76,11 @@ async function run() {
                }
              );
 
-           console.log(response3);
+            console.log(response);
 
-            console.log("runing graphQL query #1");
-            const response1  = await graphql({
-                query: `
-                { 
-                    repository($owner: String!, $repo: String!) {
-                        issues(states:CLOSED) {
-                            totalCount
-                        }
-                    }
-                } 
-                `,
-                owner: 'bbq-beets',
-                repo: 'konradpabjan-test',  
-                headers: {
-                    authorization: `bearer ${myToken}`
-                }
-            })
-            
-            console.log(response1);
 
+
+            /*
             console.log("runing graphQL query #2");
             const response2  = await graphql(
                 `
@@ -89,8 +98,9 @@ async function run() {
                   }
                 }
               );
+              */
 
-            console.log(response2);
+            //console.log(response2);
             
         } catch (error) {
             console.log(error)
