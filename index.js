@@ -29,24 +29,45 @@ async function run() {
                 column_id: columnId,
                 content_id: context.payload.issue.id,
                 content_type: "Issue"
-            });
+            });cls
             */
+
+           console.log("runing graphQL query #3");
+           const response3  = await graphql(
+               `
+                 {
+                   projects(id:"3181121") {
+                       columns() {
+                           id
+                       }
+                   }
+                 }
+               `,
+               {
+                 headers: {
+                   Authorization: `bearer ${myToken}`
+                 }
+               }
+             );
+
+           console.log(response3);
 
             console.log("runing graphQL query #1");
             const response1  = await graphql({
-                query: `{ 
-                            repository($owner: String!, $repo: String!) {
-                                issues(states:CLOSED) {
-                                    totalCount
-                                }
-                            }
-                        } 
+                query: `
+                { 
+                    repository($owner: String!, $repo: String!) {
+                        issues(states:CLOSED) {
+                            totalCount
+                        }
+                    }
+                } 
                 `,
-                  owner: 'bbq-beets',
-                  repo: 'konradpabjan-test',  
-                  headers: {
-                    Authorization: `bearer ${myToken}`
-                  }
+                owner: 'bbq-beets',
+                repo: 'konradpabjan-test',  
+                headers: {
+                    authorization: `bearer ${myToken}`
+                }
             })
             
             console.log(response1);
@@ -70,29 +91,6 @@ async function run() {
               );
 
             console.log(response2);
-
-            console.log("runing graphQL query #3");
-            const response3  = await graphql(
-                `
-                  {
-                    projects(id:"3181121") {
-                        columns() {
-                            id
-                        }
-                    }
-                  }
-                `,
-                {
-                  headers: {
-                    Authorization: `bearer ${myToken}`
-                  }
-                }
-              );
-
-            console.log(response3);
-
-
-
             
         } catch (error) {
             console.log(error)
