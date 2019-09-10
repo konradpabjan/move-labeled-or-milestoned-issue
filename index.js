@@ -33,7 +33,7 @@ async function run() {
             }
         } else {
             // A card was created in the column that we want it to end up in
-            return `A card was created in column #${columnId} for issue #${context.payload.issue.id}`;
+            return `A card was created in column #${columnId} for issue #${context.payload.issue.id} or already exists in the column`;
         }
     } else {
         // None of the labels match what we are looking for
