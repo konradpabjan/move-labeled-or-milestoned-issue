@@ -43,11 +43,14 @@ async function run() {
 
 async function tryCreateCard(octokit, columnId, issueId){
     try {
-        await octokit.projects.createCard({
+        var response = await octokit.projects.createCard({
             column_id: columnId,
             content_id: issueId,
             content_type: "Issue"
         });
+
+        console.log(response);
+        console.log("returning true");   
         return true;
     } catch (error) {
         // the card already exists in the project
