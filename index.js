@@ -21,7 +21,7 @@ async function run() {
 
     if(found){
         var isCardCreated = tryCreateCard(octokit, columnId, context.payload.issue.id);   
-        if (!isCardCreated){
+        if (isCardCreated == 0){
             // A card already exists, we must find the cardId and move it to the correct column
             var cardId = findCardId(myToken, projectId, repositoryOwner, repositoryName);
             if(cardId){
@@ -43,18 +43,15 @@ async function run() {
 
 async function tryCreateCard(octokit, columnId, issueId){
     try {
-        var response = await octokit.projects.createCard({
+        await octokit.projects.createCard({
             column_id: columnId,
             content_id: issueId,
             content_type: "Issue"
         });
-
-        console.log(response);
-        console.log("returning true");   
-        return true;
+        return 1;
     } catch (error) {
         // the card already exists in the project
-        return false;
+        return 0;
     }
 }
 
