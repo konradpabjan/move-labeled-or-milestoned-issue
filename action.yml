@@ -4,6 +4,15 @@ inputs:
   repo-token:
     description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
     required: true
+  repository-owner:
+    description: 'The repository owner'
+    required: true
+  repository-name:
+    description: 'Repository name that the project resides in'
+    required: true
+  project-id:
+    description: 'Id of the project that we want the card to move in'
+    required: true
   column-id:
     description: 'The id of the column that we want issues with the label to show up in'
     required: true
