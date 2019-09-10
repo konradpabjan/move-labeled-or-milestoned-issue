@@ -41,15 +41,16 @@ async function run() {
                           totalCount
                         }
                       }
-                  }
+                  } 
                 `,
                 {
                   headers: {
-                    authorization: myToken
+                    authorization: `token ${myToken}`
                   }
                 }
               );
 
+            
             console.log(response1);
 
             console.log("runing graphQL query #2");
@@ -69,6 +70,7 @@ async function run() {
 
             
         } catch (error) {
+            console.log(error)
             /*
             // fetch all of the columns for the project
             var columnInformation = await octokit.projects.listColumns({
