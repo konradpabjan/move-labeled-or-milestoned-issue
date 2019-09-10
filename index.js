@@ -4,8 +4,8 @@ const graphql = require('@octokit/graphql');
 
 async function run() {
     const myToken = core.getInput('repo-token');
-    const repositoryOwner = core.getInput('repository-owner');
-    const repositoryName = core.getInput('repository-name');
+    const repositoryOwner = core.getInput('repo-owner');
+    const repositoryName = core.getInput('repo-name');
     const projectId = core.getInput("project-id");
     const columnId = core.getInput('column-id');
     const labelName = core.getInput('label-name');

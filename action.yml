@@ -4,10 +4,10 @@ inputs:
   repo-token:
     description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
     required: true
-  repository-owner:
+  repo-owner:
     description: 'The repository owner'
     required: true
-  repository-name:
+  repo-name:
     description: 'Repository name that the project resides in'
     required: true
   project-id:
