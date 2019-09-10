@@ -93,7 +93,6 @@ async function run() {
                         console.log(card);
 
                         // check if the issue databaseId matches the databaseId of the card content
-                        console.log(card.node.content.databaseId )
                         if (card.node.content != null){
                             // only issues and pull requests have content
                             if (card.node.content.databaseId == context.payload.issue.id){
