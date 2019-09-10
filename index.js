@@ -7,6 +7,7 @@ async function run() {
     const projectId = core.getInput('project-id');
     const columnId = core.getInput('column-id');
     const labelName = core.getInput('label-name');
+    const octokit = new github.GitHub(myToken);
     const context = github.context;
 
     console.log(context.payload.issue.labels);
@@ -38,6 +39,7 @@ async function run() {
             console.log("we are going to be looking for the card with ID#:  " +context.payload.issue.id);
 
            console.log("runing graphQL query to find all of the cards in a project");
+           // graphQL query, very good to play around with https://developer.github.com/v4/explorer/
            const response  = await graphql(
                `
                {
