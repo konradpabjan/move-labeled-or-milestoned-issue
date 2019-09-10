@@ -45,7 +45,7 @@ async function run() {
                 `,
                 {
                   headers: {
-                    authorization: `token ${myToken}`
+                    authorization: `bearer ${myToken}`
                   }
                 }
               );
@@ -63,7 +63,12 @@ async function run() {
                         }
                       }
                   }
-                `
+                `,
+                {
+                  headers: {
+                    authorization: `bearer ${myToken}`
+                  }
+                }
               );
 
             console.log(response2);
