@@ -83,7 +83,7 @@ async function run() {
             var columns = response.repository.projects.nodes.forEach(function(project){
                 // we are at the project level
                 console.log(project.columns)
-                item.columns.edges.forEach(function(column){
+                project.columns.edges.forEach(function(column){
                     // column level
                     console.log(column);
                     column.node.cards.edges.forEach(function(card){
