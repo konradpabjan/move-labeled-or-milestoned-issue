@@ -37,7 +37,7 @@ async function run() {
                `
                  {
                    projects(id:"3181121") {
-                       columns() {
+                       columns {
                            id
                        }
                    }
