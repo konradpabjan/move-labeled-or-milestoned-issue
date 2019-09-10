@@ -112,6 +112,7 @@ async function run() {
             // gonna try to move the card to the super important column
             await octokit.projects.moveCard({
                 card_id: cardId,
+                position: "top",
                 column_id: 6443965
             })
 
