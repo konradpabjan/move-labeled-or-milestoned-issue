@@ -20,10 +20,10 @@ async function run() {
     })
 
     if(found){
-        var isCardCreated = tryCreateCard(octokit, columnId, context.payload.issue.id);   
+        var isCardCreated = await tryCreateCard(octokit, columnId, context.payload.issue.id);   
         if (isCardCreated == 0){
             // A card already exists, we must find the cardId and move it to the correct column
-            var cardId = findCardId(myToken, projectId, repositoryOwner, repositoryName);
+            var cardId = await findCardId(myToken, projectId, repositoryOwner, repositoryName);
             if(cardId){
                 moveCard(octokit, cardId, columnId);
                 return `Sucesfully moved card #${cardId} to column #${columnId}`;
