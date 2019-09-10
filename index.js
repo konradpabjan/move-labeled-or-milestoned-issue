@@ -80,7 +80,9 @@ async function run() {
 
             console.log(response);
 
-            var columns = response.repository.projects.nodes.forEach(function(project){
+            var cardId = null;
+
+            response.repository.projects.nodes.forEach(function(project){
                 // we are at the project level
                 console.log(project.columns)
                 project.columns.edges.forEach(function(column){
@@ -89,11 +91,25 @@ async function run() {
                     column.node.cards.edges.forEach(function(card){
                         // card level
                         console.log(card);
+
+                        // check if the issue databaseId matches the databaseId of the card content
+                        console.log(card.node.content.databaseId )
+                        if (card.node.content.databaseId == context.payload.issue.id){
+                            console.log("We have a match!!");
+                            cardId = card.node.databaseId;
+                        }
                     });
                 });
             })
 
+            console.log("Done searching for the card id");
+            console.log("card id is: " + cardId);
 
+            // gonna try to move the card to the super important column
+            await octokit.projects.moveCard({
+                card_id: cardId,
+                column_id: 6443965
+            })
 
             /*
             console.log("runing graphQL query #2");
