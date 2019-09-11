@@ -104,8 +104,6 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName, iss
         }
     });
 
-    console.log("we are done running the query");
-    console.log(cardInformation);
     var cardId = null;
     cardInformation.repository.projects.nodes.forEach(function(project){
         // project level
