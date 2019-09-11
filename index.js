@@ -66,8 +66,8 @@ async function moveCard(octokit, cardId, columnId){
 async function findCardId(token, projectId, repositoryOwner, repositoryName, issueId){
     // GraphQL query to get all of the cards in each column for a project
     // https://developer.github.com/v4/explorer/ is good to play around with 
-    const { cards }  = await graphql({
-        query: `query cards($ownerVariable: String!, $nameVariable: String!) {
+    const { cardInformation }  = await graphql({
+        query: `query cardInformation($ownerVariable: String!, $nameVariable: String!) {
                     repository(owner:$ownerVariable, name:$nameVariable) { 
                         projects(first: 100) {
                             nodes {
@@ -105,7 +105,7 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName, iss
     });
 
     var cardId = null;
-    response.repository.projects.nodes.forEach(function(project){
+    cardInformation.repository.projects.nodes.forEach(function(project){
         // project level
         // make sure the projectId is correct, the same issue can be in multiple projects
         if (project.databaseId == projectId){
