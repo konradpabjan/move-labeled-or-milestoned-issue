@@ -97,8 +97,8 @@ async function findCardId(token, projectId, repositoryOwner, repositoryName, iss
                         }
                     }        
                 }`,
-        owner: `"${repositoryOwner}"`,
-        name: `"${repositoryName}"`,
+        owner: repositoryOwner,
+        name: repositoryName,
         headers: {
              authorization: `bearer ${token}`
         }
