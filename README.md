@@ -1,7 +1,10 @@
 # actions-move-labeled-issue-repo
 
 ### Demo
-This demo shows an issue that has the priority label added automatically get moved from column "Second" to "Super Priority Important"
+This demo shows an issue that has the priority label added automatically get moved from column `Second` to `Super Priority Important`
+
+All in all takes less than 30 seconds from the time the label is added to the time the issue is moved in the project
+
 ![](Demo.gif)
 
 ### Use Case
