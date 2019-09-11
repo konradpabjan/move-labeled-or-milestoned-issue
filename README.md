@@ -12,8 +12,8 @@ This action is specifically meant for projects that are setup at the repository 
 |  action-token | An access token that will be used to move or create an issue in a desired column. The standard token that is present for each action will not be sufficient as it does not have sufficient privilages. You must create one that has `repo` permissions  |
 | repo-owner  | The owner of the repository  |
 | repo-name | The name of the repository  |
-| project-id  | The id of the project that we want an issue to be added to or moved. You can get the project id by using the github API: https://developer.github.com/v3/projects/#list-organization-projects or by clicking inspect element in the brower and getting the id by looking at the project. You can get the id by looking for the following property: `data-channel="projects:3181121"`  |
-| column-id | The id of the column where the issue should be created in or moved to. You can get the column id by using the github API: https://developer.github.com/v3/projects/columns/ or by clicking inspect element in the brower and getting the id by looking at the specific column when in a project. You can get the id by looking for the following property: `id="column-6443961"` |
+| project-id  | The id of the project that we want an issue to be added to or moved. You can get the project id by using the github API: https://developer.github.com/v3/projects/#list-organization-projects or by clicking inspect element in the brower and getting the id by looking at the project. You can get the id by looking for the following property (example with id 3181121, ids will vary): `data-channel="projects:3181121"`  |
+| column-id | The id of the column where the issue should be created in or moved to. You can get the column id by using the github API: https://developer.github.com/v3/projects/columns/ or by clicking inspect element in the brower and getting the id by looking at the specific column when in a project. You can get the id by looking for the following property (example with id 6443961, ids will vary): `id="column-6443961"` |
 | label-name | The label that should trigger an issue to be moved to a specific column |
 
 
