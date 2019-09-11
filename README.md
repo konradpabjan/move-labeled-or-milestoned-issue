@@ -1,1 +1,1 @@
-# actions-move-labeled-issue
+# actions-move-labeled-issue-repo
