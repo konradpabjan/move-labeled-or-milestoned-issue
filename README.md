@@ -1,11 +1,11 @@
 # actions-move-labeled-issue-repo
 
 ### Demo
-This demo shows an issue that has the priority label added automatically get moved from column `Second` to `Super Priority Important`
+This demo shows an issue that has the priority label added automatically get moved from column `New issues should show up here` to `Priority labeled stuff should automatically move here`
 
 All in all takes less than 30 seconds from the time the label is added to the time the issue is moved in the project
 
-![](Demo.gif)
+![](demo.gif)
 
 ### Use Case
 Everytime a specific label is added to an issue, the associated card in a project should be moved to a specific column. For example, you want any issue that gets labeled with "priority" to automatically move to the column that corresponds to "on deck". If the issue is not on the project board, it will be created in the desired column. If it has already been added, it will be moved to the correct column.
