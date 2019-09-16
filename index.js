@@ -25,7 +25,8 @@ async function run() {
             throw `Unable to get the column id that corresponds to column:${columnName} in project#${projectNumber}. URL:${projectUrl}`;
         }
         // get the card information, see if the issue is present
-        var cardInformation = await getCardInformation(octokit, columnId, context.payload.issue.number);
+        /*
+
         var cardId = tryGetCardIdformCardInformation(cardInformation, projectUrl);
         if (cardId){
             // card already exists for the issue
@@ -36,6 +37,7 @@ async function run() {
             // create new card in the appropriate column
             return await createNewCard(octokit, columnId, cardId);
         }
+        */
     } else {
         // None of the labels match what we are looking for, non-indicative of a failure though
         return `Issue #${context.payload.issue.id} does not have a label that matches ${labelName}, ignoring`;
@@ -58,37 +60,6 @@ async function moveExistingCard(octokit, columnId, cardId){
         column_id: columnId
     })
     return `Succesfully moved card#${cardId} to column#${columnId}`
-}
-
-async function getCardInformation(token, projectId, repositoryOwner, repositoryName, issueNumber){
-    // GraphQL query to get all of the cards in each column for a project
-    // https://developer.github.com/v4/explorer/ is good to play around with 
-    const cardInformation = await graphql(
-        `query ($ownerVariable: String!, $nameVariable: String!, $numberVariable: Int!){
-                    repository(owner:$ownerVariable, name:$nameVariable) { 
-                        issue(number:$numberVariable) {
-                            title
-                            projectCards(first: 100) {
-                              nodes {
-                                id
-                                databaseId
-                                project {
-                                  url
-                                }
-                              }
-                            }
-                        }
-                    }        
-                }`, {
-        ownerVariable: repositoryOwner,
-        nameVariable: repositoryName,
-        numberVariable: issueNumber,
-        headers: {
-             authorization: `bearer ${token}`
-        }
-    });
-
-    return cardInformation;
 }
 
 function tryGetCardIdformCardInformation(cardInformation, projectUrl){
@@ -114,37 +85,40 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl, token){
     var projectNumber = parseInt(splitUrl[6], 10);
 
     var columnId = null;
-    console.log(isOrgProject);
-    console.log(typeof isOrgProject);
-    if(isOrgProject){
-        console.log("it thinks this is a org...");
+    var cardId = null;
+    if(isOrgProject == 'true'){
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
         console.log(`Org Login:${orgLogin}, project number#${projectNumber}`);
-        var orgColumnInfo = await getOrgProjectColumns(orgLogin, projectNumber, token);
-        orgColumnInfo.organization.project.columns.nodes.forEach(function(columnNode){
+        var orgInformation = await getOrgInformation(orgLogin, projectNumber, token);
+        orgInformation.organization.project.columns.nodes.forEach(function(columnNode){
             var name = columnNode.name;
             if(name == columnName){
                 columnId = columnNode.databaseId;
             }
+            // check each column if there is a card that exists for the issue
+            console.log(columnNode);
         });
+
     } else {
         // Repo url will be in the format: https://github.com/bbq-beets/konradpabjan-test/projects/1
         var repoOwner = splitUrl[3];
         var repoName = splitUrl[4];
         console.log(`Repo Owner:${repoOwner}, repo name:${repoName} project number#${projectNumber}`);
-        var repoColumnInfo = await getRepoProjectColumns(repoOwner, repoName, projectNumber, token);
+        var repoColumnInfo = await getRepoInformation(repoOwner, repoName, projectNumber, token);
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             var name = columnNode.name;
             if(name == columnName){
                 columnId = columnNode.databaseId;
             }
+            // check each column if there is a card that exists for the issue
+            console.log(columnNode);
         });
     }
     return columnId;
 }
 
-async function getOrgProjectColumns(organizationLogin, projectNumber, token){
+async function getOrgInformation(organizationLogin, projectNumber, token){
     // GraphQL query to get all of the cards in each column for a project
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
@@ -159,6 +133,19 @@ async function getOrgProjectColumns(organizationLogin, projectNumber, token){
                                     nodes{
                                         databaseId
                                         name
+                                        cards {
+                                            edges {
+                                                node {
+                                                    databaseId
+                                                    content {
+                                                        ... on Issue {
+                                                            databaseId
+                                                            number
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                         }
@@ -173,7 +160,7 @@ async function getOrgProjectColumns(organizationLogin, projectNumber, token){
     return response;
 }
 
-async function getRepoProjectColumns(repositoryOwner, repositoryName, projectNumber, token){
+async function getRepoInformation(repositoryOwner, repositoryName, projectNumber, token){
     // GraphQL query to get all of the columns in a project that is setup at that org level
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
@@ -189,6 +176,19 @@ async function getRepoProjectColumns(repositoryOwner, repositoryName, projectNum
                                 nodes{
                                     databaseId
                                     name
+                                    cards {
+                                        edges {
+                                            node {
+                                                databaseId
+                                                content {
+                                                    ... on Issue {
+                                                        databaseId
+                                                        number
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
