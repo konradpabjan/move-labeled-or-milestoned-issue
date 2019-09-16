@@ -25,7 +25,7 @@ async function run() {
         var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.issue.id);
         var columnId = info[0];
         var cardId = info[1];
-        console.log(columnId, cardId);
+        console.log(`columnId is: ${columnId}, cardId is: ${cardId}`);
         if (cardId != null){
             // card already exists for the issue
             // move card to the appropriate column
@@ -47,7 +47,7 @@ async function createNewCard(octokit, columnId, issueId){
         content_id: issueId,
         content_type: "Issue"
     });
-    return `Successfully created a new card in column#${columnId} for an issue with the corresponding id:${issueId}!`;
+    return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
 }
 
 async function moveExistingCard(octokit, columnId, cardId){
@@ -55,24 +55,8 @@ async function moveExistingCard(octokit, columnId, cardId){
         card_id: cardId,
         position: "top",
         column_id: columnId
-    })
-    return `Succesfully moved card#${cardId} to column#${columnId}`
-}
-
-function tryGetCardIdformCardInformation(cardInformation, projectUrl){
-    var cardId = null;
-    cardInformation.repository.issue.projectCards.nodes.forEach(function(card){
-        if (card.nodes){
-            card.nodes.forEach(function(node){
-                // check if the project url is correct
-                if(node.project.url == projectUrl){
-                    // a card exists in the project for the issue, get the card id
-                    cardId = node.databaseId;
-                }
-            });
-        }
     });
-    return cardId;
+    return `Succesfully moved card #${cardId} to column #${columnId} !`;
 }
 
 async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, token, issueDatabaseId){
@@ -129,8 +113,6 @@ async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectU
             });
         });
     }
-    console.log(columnId);
-    console.log(cardId);
     return [columnId, cardId];
 }
 
@@ -222,9 +204,5 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
 
 run()
     .then(
-        (response) => { console.log(`Finished running: ${response}`) },
-        (err)  => { console.log(err) }
+        (response) => { console.log(`Finished running: ${response}`) }
     )
-    .then(
-        () => { process.exit() }
-     )
