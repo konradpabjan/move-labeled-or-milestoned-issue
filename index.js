@@ -18,11 +18,9 @@ async function run() {
         }
     })
 
-    console.log(context.payload);
-
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var columnId = await tryGetColumnId(projectNumber, isOrgProject, columnName, projectUrl);
+        var columnId = await tryGetColumnId(isOrgProject, columnName, projectUrl);
         if(!columnId){
             throw `Unable to get the column id that corresponds to column:${columnName} in project#${projectNumber}. URL:${projectUrl}`;
         }
@@ -109,7 +107,7 @@ function tryGetCardIdformCardInformation(cardInformation, projectUrl){
     return cardId;
 }
 
-async function tryGetColumnId(projectNumber, isOrgProject, columnName, projectUrl){
+async function tryGetColumnId(isOrgProject, columnName, projectUrl){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
     var splitUrl = projectUrl.split("/");
@@ -181,7 +179,7 @@ async function getRepoProjectColumns(repositoryOwner, repositoryName, projectNum
     const response = await graphql(
         `query ($ownerVariable: String!, $nameVariable: String!, $projectVariable: Int!){
                     repository(owner:$ownerVariable, name:$nameVariable) {
-                        project(number:$projectNumber){
+                        project(number:$projectVariable){
                             id
                             number
                             databaseId
