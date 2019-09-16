@@ -70,7 +70,7 @@ async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectU
     if(isOrgProject == 'true'){
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
-        console.log(`Org Login:${orgLogin}, project number#${projectNumber}`);
+        console.log(`This project is configured at the org level. Org Login:${orgLogin}, project number#${projectNumber}`);
         var orgInformation = await getOrgInformation(orgLogin, projectNumber, token);
         orgInformation.organization.project.columns.nodes.forEach(function(columnNode){
             var name = columnNode.name;
@@ -78,7 +78,6 @@ async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectU
                 columnId = columnNode.databaseId;
             }
             // check each column if there is a card that exists for the issue
-            console.log(columnNode);
             columnNode.cards.edges.forEach(function(card){
                 // card level
                 if (card.node.content != null){
@@ -93,7 +92,7 @@ async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectU
         // Repo url will be in the format: https://github.com/bbq-beets/konradpabjan-test/projects/1
         var repoOwner = splitUrl[3];
         var repoName = splitUrl[4];
-        console.log(`Repo Owner:${repoOwner}, repo name:${repoName} project number#${projectNumber}`);
+        console.log(`This project is configured at the repo level. Repo Owner:${repoOwner}, repo name:${repoName} project number#${projectNumber}`);
         var repoColumnInfo = await getRepoInformation(repoOwner, repoName, projectNumber, token);
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             var name = columnNode.name;
@@ -101,7 +100,6 @@ async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectU
                 columnId = columnNode.databaseId;
             }
             // check each column if there is a card that exists for the issue
-            console.log(columnNode);
             columnNode.cards.edges.forEach(function(card){
                 // card level
                 if (card.node.content != null){
