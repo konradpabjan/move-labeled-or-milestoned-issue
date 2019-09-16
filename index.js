@@ -107,18 +107,21 @@ function tryGetCardIdformCardInformation(cardInformation, projectUrl){
     return cardId;
 }
 
-async function tryGetColumnId(isOrgProject, columnName, projectUrl){
+async function tryGetColumnId(isOrgProject, columnName, projectUrl, token){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
     var splitUrl = projectUrl.split("/");
     var projectNumber = parseInt(splitUrl[6], 10);
 
     var columnId = null;
+    console.log(isOrgProject);
+    console.log(typeof isOrgProject);
     if(isOrgProject){
+        console.log("it thinks this is a org...");
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
         console.log(`Org Login:${orgLogin}, project number#${projectNumber}`);
-        var orgColumnInfo = await getOrgProjectColumns(orgLogin, projectNumber);
+        var orgColumnInfo = await getOrgProjectColumns(orgLogin, projectNumber, token);
         orgColumnInfo.organization.project.columns.nodes.forEach(function(columnNode){
             var name = columnNode.name;
             if(name == columnName){
@@ -130,7 +133,7 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl){
         var repoOwner = splitUrl[3];
         var repoName = splitUrl[4];
         console.log(`Repo Owner:${repoOwner}, repo name:${repoName} project number#${projectNumber}`);
-        var repoColumnInfo = await getRepoProjectColumns(repoOwner, repoName, projectNumber);
+        var repoColumnInfo = await getRepoProjectColumns(repoOwner, repoName, projectNumber, token);
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             var name = columnNode.name;
             if(name == columnName){
@@ -141,7 +144,7 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl){
     return columnId;
 }
 
-async function getOrgProjectColumns(organizationLogin, projectNumber){
+async function getOrgProjectColumns(organizationLogin, projectNumber, token){
     // GraphQL query to get all of the cards in each column for a project
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
@@ -170,7 +173,7 @@ async function getOrgProjectColumns(organizationLogin, projectNumber){
     return response;
 }
 
-async function getRepoProjectColumns(repositoryOwner, repositoryName, projectNumber){
+async function getRepoProjectColumns(repositoryOwner, repositoryName, projectNumber, token){
     // GraphQL query to get all of the columns in a project that is setup at that org level
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
