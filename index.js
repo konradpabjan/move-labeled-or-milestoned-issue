@@ -112,9 +112,6 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl){
     // if repo project, need repo owner and name
     var splitUrl = projectUrl.split("/");
     var projectNumber = parseInt(splitUrl[6], 10);
-    if (!Number.isNaN(projectNumber)){
-        throw `Unable to get projectNumber for the supplied URL:${projectUrl}. Parsing returned ${projectNumber}`;
-    }
 
     var columnId = null;
     if(isOrgProject){
