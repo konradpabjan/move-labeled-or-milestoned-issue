@@ -18,8 +18,6 @@ async function run() {
         }
     })
 
-    console.log(context.payload.issue);
-
     if(found){
         // get the columnId for the project where the issue should be added/moved
         var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.issue.id);
@@ -42,6 +40,7 @@ async function run() {
 }
 
 async function createNewCard(octokit, columnId, issueId){
+    console.log(`No card exists for the labeled issue in the project. Attempting to create a card in column ${columnId}, for an issue with the corresponding id #${issueId}`);
     await octokit.projects.createCard({
         column_id: columnId,
         content_id: issueId,
@@ -51,6 +50,7 @@ async function createNewCard(octokit, columnId, issueId){
 }
 
 async function moveExistingCard(octokit, columnId, cardId){
+    console.log(`A card already exists for the issue. Attempting to move card #${cardId} to column #${columnId}`);
     await octokit.projects.moveCard({
         card_id: cardId,
         position: "top",
