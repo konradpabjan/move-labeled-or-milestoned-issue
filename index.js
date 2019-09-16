@@ -7,7 +7,6 @@ async function run() {
     const projectUrl = core.getInput('project-url');
     const columnName = core.getInput('column-name');
     const labelName = core.getInput('label-name');
-    const isOrgProject = core.getInput('is-org-project');
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
@@ -20,7 +19,7 @@ async function run() {
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.issue.id);
+        var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, context.payload.issue.id);
         var columnId = info[0];
         var cardId = info[1];
         console.log(`columnId is: ${columnId}, cardId is: ${cardId}`);
@@ -59,15 +58,16 @@ async function moveExistingCard(octokit, columnId, cardId){
     return `Succesfully moved card #${cardId} to column #${columnId} !`;
 }
 
-async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, token, issueDatabaseId){
+async function tryGetColumnAndCardInformation(columnName, projectUrl, token, issueDatabaseId){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
+    var columnId = null;
+    var cardId = null;
     var splitUrl = projectUrl.split("/");
     var projectNumber = parseInt(splitUrl[6], 10);
 
-    var columnId = null;
-    var cardId = null;
-    if(isOrgProject == 'true'){
+    // check if repo or org project
+    if(splitUrl[3] == 'orgs'){
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
         console.log(`This project is configured at the org level. Org Login:${orgLogin}, project number#${projectNumber}`);

@@ -13,9 +13,6 @@ inputs:
   label-name:
     description: 'The label that specifies if an issue should be automatically moved to the column'
     required: true
-  is-org-project:
-    description: 'Boolean to describe if the project is configured at the org level vs just for a repository'
-    required: true
 runs:
   using: 'node12'
   main: 'index.js'
