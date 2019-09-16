@@ -22,10 +22,13 @@ async function run() {
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var columnId = await tryGetColumnId(isOrgProject, columnName, projectUrl, myToken);
+        var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.id);
+        console.log(info);
+        /*
         if(!columnId){
             throw `Unable to get the column id that corresponds to column:${columnName} in project#${projectNumber}. URL:${projectUrl}`;
         }
+        */
         // get the card information, see if the issue is present
         /*
 
@@ -80,7 +83,7 @@ function tryGetCardIdformCardInformation(cardInformation, projectUrl){
     return cardId;
 }
 
-async function tryGetColumnId(isOrgProject, columnName, projectUrl, token){
+async function tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, token, issueDatabaseId){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
     var splitUrl = projectUrl.split("/");
@@ -104,11 +107,12 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl, token){
                 // card level
                 if (card.node.content != null){
                     // only issues and pull requests have content
-                    // TODO 
+                    if(card.node.content.databaseId == issueDatabaseId){
+                        cardId = card.node.databaseId;
+                    }
                 }
             });
         });
-
     } else {
         // Repo url will be in the format: https://github.com/bbq-beets/konradpabjan-test/projects/1
         var repoOwner = splitUrl[3];
@@ -122,9 +126,20 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl, token){
             }
             // check each column if there is a card that exists for the issue
             console.log(columnNode);
+            columnNode.cards.edges.forEach(function(card){
+                // card level
+                if (card.node.content != null){
+                    // only issues and pull requests have content
+                    if(card.node.content.databaseId == issueDatabaseId){
+                        cardId = card.node.databaseId;
+                    }
+                }
+            });
         });
     }
-    return columnId;
+    console.log(columnId);
+    console.log(cardId);
+    return [columnId, cardId];
 }
 
 async function getOrgInformation(organizationLogin, projectNumber, token){
