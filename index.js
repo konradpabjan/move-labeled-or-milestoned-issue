@@ -22,7 +22,7 @@ async function run() {
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var columnId = tryGetColumnId(projectNumber, isOrgProject, columnName, projectUrl);
+        var columnId = await tryGetColumnId(projectNumber, isOrgProject, columnName, projectUrl);
         if(!columnId){
             throw `Unable to get the column id that corresponds to column:${columnName} in project#${projectNumber}. URL:${projectUrl}`;
         }
@@ -109,7 +109,7 @@ function tryGetCardIdformCardInformation(cardInformation, projectUrl){
     return cardId;
 }
 
-function tryGetColumnId(projectNumber, isOrgProject, columnName, projectUrl){
+async function tryGetColumnId(projectNumber, isOrgProject, columnName, projectUrl){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
     var splitUrl = projectUrl.split("/");
