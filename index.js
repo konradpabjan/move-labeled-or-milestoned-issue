@@ -22,18 +22,18 @@ async function run() {
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.id);
+        var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.issue.id);
         var columnId = info[0];
         var cardId = info[1];
         console.log(columnId, cardId);
         if (cardId != null){
             // card already exists for the issue
             // move card to the appropriate column
-            return await moveExistingCard(octokit, columnId, context.payload.issue.id);
+            return await moveExistingCard(octokit, columnId, cardId);
         } else {
             // card is not present
             // create new card in the appropriate column
-            return await createNewCard(octokit, columnId, cardId);
+            return await createNewCard(octokit, columnId, context.payload.issue.id);
         }
     } else {
         // None of the labels match what we are looking for, non-indicative of a failure though
