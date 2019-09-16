@@ -18,6 +18,8 @@ async function run() {
         }
     })
 
+    console.log(context.payload.issue);
+
     if(found){
         // get the columnId for the project where the issue should be added/moved
         var columnId = await tryGetColumnId(isOrgProject, columnName, projectUrl, myToken);
@@ -98,6 +100,13 @@ async function tryGetColumnId(isOrgProject, columnName, projectUrl, token){
             }
             // check each column if there is a card that exists for the issue
             console.log(columnNode);
+            columnNode.cards.edges.forEach(function(card){
+                // card level
+                if (card.node.content != null){
+                    // only issues and pull requests have content
+                    // TODO 
+                }
+            });
         });
 
     } else {
