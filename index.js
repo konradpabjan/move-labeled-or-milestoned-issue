@@ -23,16 +23,9 @@ async function run() {
     if(found){
         // get the columnId for the project where the issue should be added/moved
         var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.id);
+        var columnId = info[0];
+        var cardId = info[1];
         console.log(info);
-        /*
-        if(!columnId){
-            throw `Unable to get the column id that corresponds to column:${columnName} in project#${projectNumber}. URL:${projectUrl}`;
-        }
-        */
-        // get the card information, see if the issue is present
-        /*
-
-        var cardId = tryGetCardIdformCardInformation(cardInformation, projectUrl);
         if (cardId){
             // card already exists for the issue
             // move card to the appropriate column
@@ -42,7 +35,6 @@ async function run() {
             // create new card in the appropriate column
             return await createNewCard(octokit, columnId, cardId);
         }
-        */
     } else {
         // None of the labels match what we are looking for, non-indicative of a failure though
         return `Issue #${context.payload.issue.id} does not have a label that matches ${labelName}, ignoring`;
