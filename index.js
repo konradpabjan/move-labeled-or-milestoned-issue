@@ -202,5 +202,9 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
 
 run()
     .then(
-        (response) => { console.log(`Finished running: ${response}`) }
+        (response) => { console.log(`Finished running: ${response}`) },
+        (error) => { 
+            console.log(`#ERROR# ${error}`);
+            process.exit(1); 
+        }
     )
