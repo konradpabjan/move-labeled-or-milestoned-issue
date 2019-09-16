@@ -3,9 +3,17 @@ const core = require('@actions/core');
 const graphql = require('@octokit/graphql');
 
 async function run() {
+<<<<<<< HEAD
     const myToken = core.getInput('repo-token');
     const projectUrl = core.getInput('project-url');
     const columnName = core.getInput('column-name');
+=======
+    const myToken = core.getInput('action-token');
+    const repositoryOwner = core.getInput('repo-owner');
+    const repositoryName = core.getInput('repo-name');
+    const projectId = core.getInput("project-id");
+    const columnId = core.getInput('column-id');
+>>>>>>> bb5d2c267d2ea272d109c8d69a887ae9cb06ad1c
     const labelName = core.getInput('label-name');
     const isOrgProject = core.getInput('is-org-project');
     const octokit = new github.GitHub(myToken);

@@ -1,8 +1,8 @@
 name: 'Move newly labeled issue to a specific column'
 description: 'Move a newly labeled issue to a specific column in a project'
 inputs:
-  repo-token:
-    description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
+  action-token:
+    description: 'Token for the repo. The usual secrets.GITHUB_TOKEN will not be sufficient, you must create a token that has repo permissions'
     required: true
   project-url:
     description: 'The url of the project'
