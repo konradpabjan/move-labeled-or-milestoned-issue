@@ -3,7 +3,7 @@ const core = require('@actions/core');
 const graphql = require('@octokit/graphql');
 
 async function run() {
-    const myToken = core.getInput('repo-token');
+    const myToken = core.getInput('action-token');
     const projectUrl = core.getInput('project-url');
     const columnName = core.getInput('column-name');
     const labelName = core.getInput('label-name');
