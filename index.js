@@ -25,8 +25,8 @@ async function run() {
         var info = await tryGetColumnAndCardInformation(isOrgProject, columnName, projectUrl, myToken, context.payload.id);
         var columnId = info[0];
         var cardId = info[1];
-        console.log(info);
-        if (cardId){
+        console.log(columnId, cardId);
+        if (cardId != null){
             // card already exists for the issue
             // move card to the appropriate column
             return await moveExistingCard(octokit, columnId, context.payload.issue.id);
