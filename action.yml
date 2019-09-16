@@ -4,20 +4,17 @@ inputs:
   repo-token:
     description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
     required: true
-  repo-owner:
-    description: 'The repository owner'
+  project-url:
+    description: 'The url of the project'
     required: true
-  repo-name:
-    description: 'Repository name that the project resides in'
-    required: true
-  project-id:
-    description: 'Id of the project that we want the card to move in'
-    required: true
-  column-id:
-    description: 'The id of the column that we want issues with the label to show up in'
+  column-name:
+    description: 'The column that the card should end up'
     required: true
   label-name:
     description: 'The label that specifies if an issue should be automatically moved to the column'
+    required: true
+  is-org-project:
+    description: 'Boolean to describe if the project is configured at the org level vs just for a repository'
     required: true
 runs:
   using: 'node12'
