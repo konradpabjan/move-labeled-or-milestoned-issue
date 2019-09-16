@@ -20,7 +20,7 @@ async function run() {
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var columnId = await tryGetColumnId(isOrgProject, columnName, projectUrl);
+        var columnId = await tryGetColumnId(isOrgProject, columnName, projectUrl, myToken);
         if(!columnId){
             throw `Unable to get the column id that corresponds to column:${columnName} in project#${projectNumber}. URL:${projectUrl}`;
         }
