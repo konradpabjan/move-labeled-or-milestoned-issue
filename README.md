@@ -17,7 +17,7 @@ This action can be used for projects that are linked and setup at the org level 
 | Input | Description  |
 |---------|---|
 |  action-token | An access token that will be used to move or create an issue in a desired column. The standard token that is present for each action will not be sufficient as it does not have sufficient privilages. You must create one that has `repo` permissions  |
-| project-url  | The url of the project. Will be something like `https://github.com/orgs/github/projects/1` or `https://github.com/konradpabjan/example/projects/1  |
+| project-url  | The url of the project. Will be something like `https://github.com/orgs/github/projects/1` or `https://github.com/konradpabjan/example/projects/1`  |
 | column-name | The name of the column in projec that issues should be moved to |
 | label-name | The label that should trigger an issue to be moved to a specific column |
 | columns-to-ignore | Comma seperated list of column names that should be ignored. If an issue/card already exists in a column with one of the names, it will be ignored. This is optional|
