@@ -7,6 +7,7 @@ async function run() {
     const projectUrl = core.getInput('project-url');
     const columnName = core.getInput('column-name');
     const labelName = core.getInput('label-name');
+    const ignoreList = core.getInput('columns-to-ignore')
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
@@ -15,15 +16,22 @@ async function run() {
         if(labelName == item.name){
             found = true;
         }
-    })
+    });
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
         var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, context.payload.issue.id);
         var columnId = info[0];
         var cardId = info[1];
-        console.log(`columnId is: ${columnId}, cardId is: ${cardId}`);
-        if (cardId != null){
+        var currentColumn = info[2];
+        console.log(`columnId is: ${columnId}, cardId is: ${cardId}, currentColumn is: ${currentColumn}`);
+
+        var skip = ignoreList.split(",");
+        if (cardId != null && skip.includes(currentColumn)){
+            // card is present in a column that we want to ignore, don't move or do anything
+            return `Card exists for issue in column ${currentColumn}. Column specified to be ignored, not moving issue.`;
+        }
+        else if (cardId != null){
             // card already exists for the issue
             // move card to the appropriate column
             return await moveExistingCard(octokit, columnId, cardId);
@@ -63,6 +71,7 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
     // if repo project, need repo owner and name
     var columnId = null;
     var cardId = null;
+    var currentColumnName = null;
     var splitUrl = projectUrl.split("/");
     var projectNumber = parseInt(splitUrl[6], 10);
 
@@ -84,6 +93,7 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
                     // only issues and pull requests have content
                     if(card.node.content.databaseId == issueDatabaseId){
                         cardId = card.node.databaseId;
+                        currentColumnName = columnNode.name;
                     }
                 }
             });
@@ -106,12 +116,13 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
                     // only issues and pull requests have content
                     if(card.node.content.databaseId == issueDatabaseId){
                         cardId = card.node.databaseId;
+                        currentColumnName = columnNode.name;
                     }
                 }
             });
         });
     }
-    return [columnId, cardId];
+    return [columnId, cardId, currentColumnName];
 }
 
 async function getOrgInformation(organizationLogin, projectNumber, token){

@@ -13,6 +13,9 @@ inputs:
   label-name:
     description: 'The label that specifies if an issue should be automatically moved to the column'
     required: true
+  columns-to-ignore:
+    description: 'Comma seperated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
