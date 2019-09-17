@@ -35,7 +35,7 @@ jobs:
   Move_Labeled_Issue_On_Project_Board:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/actions-move-labeled-issue-repo@master
+    - uses: konradpabjan/actions-move-labeled-issue-repo@1fcae2621
       with:
         action-token: "${{ secrets.MY_TOKEN }}"
         project-url: "https://github.com/orgs/github/projects/1"
