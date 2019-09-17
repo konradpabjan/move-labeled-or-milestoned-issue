@@ -10,7 +10,7 @@ All in all takes less than 30 seconds from the time the label is added to the ti
 ### Use Case
 Everytime a specific label is added to an issue, the associated card in a project should be moved to a specific column. For example, you want any issue that gets labeled with "priority" to automatically move to the column that corresponds to "on deck". If the issue is not on the project board, it will be created in the desired column. If it has already been added, it will be moved to the correct column.
 
-This action is specifically meant for projects that are setup at the repository level with **no association with an organization**. To move a card in a project that is associated with an organization (linked), use the following action: https://github.com/konradpabjan/actions-move-labeled-issue-org
+This action can be used for projects that are linked and setup at the org level or repository level. The token that is supplied though must have `repo` permissions. If the project is linked at the org level, it must also have `org:read` permissions.
 
 ### Input
 
