@@ -3,8 +3,6 @@
 ### Demo
 This demo shows an issue that has the priority label added automatically get moved from column `New issues should show up here` to `Priority labeled stuff should automatically move here`
 
-All in all takes less than 30 seconds from the time the label is added to the time the issue is moved in the project
-
 ![](demo.gif)
 
 ### Use Case
@@ -35,7 +33,7 @@ jobs:
   Move_Labeled_Issue_On_Project_Board:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/actions-move-labeled-issue-repo@1fcae2621
+    - uses: konradpabjan/actions-move-labeled-issue-repo@v1.0
       with:
         action-token: "${{ secrets.MY_TOKEN }}"
         project-url: "https://github.com/orgs/github/projects/1"
