@@ -14,8 +14,11 @@ inputs:
     description: 'The column that the card should end up'
     required: true
   label-name:
-    description: 'The label that specifies if an issue should be automatically moved to the column'
-    required: true
+    description: 'The label that specifies if an issue should be automatically moved to the column (mutually exclusive with milestone-name)'
+    required: false
+  milestone-name:
+    description: 'The milestone that specifies if an issue should be automatically moved to the column (mutually exclusive with label-name)'
+    required: false
   columns-to-ignore:
     description: 'Comma seperated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved'
     required: false

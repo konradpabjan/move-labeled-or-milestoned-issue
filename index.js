@@ -7,16 +7,31 @@ async function run() {
     const projectUrl = core.getInput("project-url");
     const columnName = core.getInput("column-name");
     const labelName = core.getInput("label-name");
+    const milestoneName = core.getInput("milestone-name");
     const ignoreList = core.getInput("columns-to-ignore");
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
+    if(!milestoneName && !labelName){
+        throw new Error("one of label-name and milestone-name must be set");
+    }
+    else if (milestoneName && labelName){
+        throw new Error("label-name and milestone-name cannot both be set");
+    }
+
     var found = false;
-    context.payload.issue.labels.forEach(function(item){
-        if(labelName == item.name){
+    if(labelName){
+        context.payload.issue.labels.forEach(function(item){
+            if(labelName == item.name){
+                found = true;
+            }
+        });
+    }
+    if(milestoneName){
+        if(context.payload.issue.milestone && context.payload.issue.milestone.title == milestoneName){
             found = true;
         }
-    });
+    }
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
