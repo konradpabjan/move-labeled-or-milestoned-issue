@@ -18,7 +18,7 @@ This action can be used for projects that are linked and setup at the org level 
 | project-url  | The url of the project. Will be something like `https://github.com/orgs/github/projects/1` or `https://github.com/konradpabjan/example/projects/1`  |
 | column-name | The name of the column in projec that issues should be moved to |
 | label-name | The label that should trigger an issue to be moved to a specific column |
-| columns-to-ignore | Comma seperated list of column names that should be ignored. If an issue/card already exists in a column with one of the names, it will be ignored. This is optional|
+| columns-to-ignore | Comma separated list of column names that should be ignored. If an issue/card already exists in a column with one of the names, it will be ignored. Use `*` to ignore all columns. This is optional|
 
 ### Creating an action-token
 

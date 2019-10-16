@@ -27,7 +27,7 @@ async function run() {
         console.log(`columnId is: ${columnId}, cardId is: ${cardId}, currentColumn is: ${currentColumn}`);
 
         var skip = ignoreList.split(",");
-        if (cardId != null && skip.includes(currentColumn)){
+        if (cardId != null && (ignoreList == "*" || skip.includes(currentColumn))){
             // card is present in a column that we want to ignore, don't move or do anything
             return `Card exists for issue in column ${currentColumn}. Column specified to be ignored, not moving issue.`;
         }
