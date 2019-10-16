@@ -1,13 +1,13 @@
-const github = require('@actions/github');
-const core = require('@actions/core');
-const graphql = require('@octokit/graphql');
+const github = require("@actions/github");
+const core = require("@actions/core");
+const graphql = require("@octokit/graphql");
 
 async function run() {
-    const myToken = core.getInput('action-token');
-    const projectUrl = core.getInput('project-url');
-    const columnName = core.getInput('column-name');
-    const labelName = core.getInput('label-name');
-    const ignoreList = core.getInput('columns-to-ignore')
+    const myToken = core.getInput("action-token");
+    const projectUrl = core.getInput("project-url");
+    const columnName = core.getInput("column-name");
+    const labelName = core.getInput("label-name");
+    const ignoreList = core.getInput("columns-to-ignore");
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
@@ -76,7 +76,7 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
     var projectNumber = parseInt(splitUrl[6], 10);
 
     // check if repo or org project
-    if(splitUrl[3] == 'orgs'){
+    if(splitUrl[3] == "orgs"){
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
         console.log(`This project is configured at the org level. Org Login:${orgLogin}, project number#${projectNumber}`);
@@ -130,40 +130,40 @@ async function getOrgInformation(organizationLogin, projectNumber, token){
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
         `query ($loginVariable: String!, $projectVariable: Int!){
-                    organization(login:$loginVariable) {
-                        name
-                            project(number:$projectVariable) {
-                                databaseId
-                                name
-                                url
-                                columns(first:100){
-                                    nodes{
+            organization(login:$loginVariable) {
+                name
+                project(number:$projectVariable) {
+                    databaseId
+                    name
+                    url
+                    columns(first:100){
+                        nodes{
+                            databaseId
+                            name
+                            cards {
+                                edges {
+                                    node {
                                         databaseId
-                                        name
-                                        cards {
-                                            edges {
-                                                node {
+                                            content {
+                                                ... on Issue {
                                                     databaseId
-                                                    content {
-                                                        ... on Issue {
-                                                            databaseId
-                                                            number
-                                                        }
-                                                    }
+                                                    number
                                                 }
                                             }
                                         }
                                     }
                                 }
+                            }
                         }
                     }
-                }`, {
-        loginVariable: organizationLogin,
-        projectVariable: projectNumber,
-        headers: {
-             authorization: `bearer ${token}`
-        }
-    });
+                }
+            }`,{
+            loginVariable: organizationLogin,
+            projectVariable: projectNumber,
+            headers: {
+                authorization: `bearer ${token}`
+            }
+        });
     return response;
 }
 
@@ -172,26 +172,25 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
         `query ($ownerVariable: String!, $nameVariable: String!, $projectVariable: Int!){
-                    repository(owner:$ownerVariable, name:$nameVariable) {
-                        project(number:$projectVariable){
-                            id
-                            number
+            repository(owner:$ownerVariable, name:$nameVariable) {
+                project(number:$projectVariable){
+                    id
+                    number
+                    databaseId
+                    name
+                    url
+                    columns(first:100){
+                        nodes{
                             databaseId
                             name
-                            url
-                            columns(first:100){
-                                nodes{
-                                    databaseId
-                                    name
-                                    cards {
-                                        edges {
-                                            node {
-                                                databaseId
-                                                content {
-                                                    ... on Issue {
-                                                        databaseId
-                                                        number
-                                                    }
+                            cards {
+                                edges {
+                                    node {
+                                        databaseId
+                                            content {
+                                                ... on Issue {
+                                                    databaseId
+                                                    number
                                                 }
                                             }
                                         }
@@ -199,23 +198,24 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
                                 }
                             }
                         }
-                    }        
-                }`, {
-        ownerVariable: repositoryOwner,
-        nameVariable: repositoryName,
-        projectVariable: projectNumber,
-        headers: {
-             authorization: `bearer ${token}`
-        }
-    });
+                    }
+                }        
+            }`, {
+            ownerVariable: repositoryOwner,
+            nameVariable: repositoryName,
+            projectVariable: projectNumber,
+            headers: {
+                authorization: `bearer ${token}`
+            }
+        });
     return response;
 }
 
 run()
     .then(
-        (response) => { console.log(`Finished running: ${response}`) },
+        (response) => { console.log(`Finished running: ${response}`); },
         (error) => { 
             console.log(`#ERROR# ${error}`);
             process.exit(1); 
         }
-    )
+    );
