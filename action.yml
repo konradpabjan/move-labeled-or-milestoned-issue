@@ -1,5 +1,5 @@
-name: 'Move newly labeled issue to a specific column'
-description: 'Move a newly labeled issue to a specific column in a project'
+name: 'Move labeled or milestoned issue to a specific project column'
+description: 'Move an newly created issue or existing issue that has been labeled or milestoned to a specific column in a project'
 branding:
   icon: 'move'  
   color: 'yellow'
