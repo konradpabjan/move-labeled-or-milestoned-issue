@@ -1,7 +1,7 @@
-# actions-move-labeled-issue-repo
+# Move-labeled-or-milestoned-issue
 
 ### Demo
-This demo shows an issue that has the priority label added automatically get moved from column `New issues should show up here` to `Priority labeled stuff should automatically move here`
+This demo shows an issue that has the priority label added automatically get moved from column `New issues should show up here` to `Priority labeled stuff should automatically move here`.
 
 ![](demo.gif)
 
@@ -16,7 +16,7 @@ This action can be used for projects that are linked and setup at the org level 
 |---------|---|
 |  action-token | An access token that will be used to move or create an issue in a desired column. The standard token that is present for each action will not be sufficient as it does not have sufficient privilages. You must create one that has `repo` permissions (see below)  |
 | project-url  | The url of the project. Will be something like `https://github.com/orgs/github/projects/1` or `https://github.com/konradpabjan/example/projects/1`  |
-| column-name | The name of the column in projec that issues should be moved to |
+| column-name | The name of the column in project that issues should be moved to |
 | label-name | The label that should trigger an issue to be moved to a specific column (mutually exclusive with milestone-name) |
 | milestone-name | The milestone that should trigger an issue to be moved to a specific column (mutually exclusive with label-name) |
 | columns-to-ignore | Comma separated list of column names that should be ignored. If an issue/card already exists in a column with one of the names, it will be ignored. Use `*` to ignore all columns. This is optional|
