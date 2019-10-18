@@ -1,4 +1,4 @@
-# Move-labeled-or-milestoned-issue
+# Move labeled or milestoned issue
 
 ### Demo
 This demo shows an issue that has the priority label added automatically get moved from column `New issues should show up here` to `Priority labeled stuff should automatically move here`.
