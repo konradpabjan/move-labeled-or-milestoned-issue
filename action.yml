@@ -20,7 +20,7 @@ inputs:
     description: 'The milestone that specifies if an issue should be automatically moved to the column (mutually exclusive with label-name)'
     required: false
   columns-to-ignore:
-    description: 'Comma seperated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved'
+    description: 'Comma separated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved. Use `*` to ignore all columns'
     required: false
 runs:
   using: 'node12'
