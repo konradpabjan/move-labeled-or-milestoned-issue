@@ -22,6 +22,9 @@ inputs:
   columns-to-ignore:
     description: 'Comma separated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved. Use `*` to ignore all columns'
     required: false
+  add-as-note:
+    description: 'Set this to true if you want to add the issue in a note instead of adding the card to the project.'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'

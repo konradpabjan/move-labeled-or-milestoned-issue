@@ -9,6 +9,7 @@ async function run() {
     const labelName = core.getInput("label-name");
     const milestoneName = core.getInput("milestone-name");
     const ignoreList = core.getInput("columns-to-ignore");
+    const addNote = core.getInput("add-as-note");
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
@@ -47,7 +48,12 @@ async function run() {
             skip = ignoreList.split(",");
         }
         
-        if (cardId != null && (ignoreList == "*" || skip.includes(currentColumn))){
+        if (addNote == "true") {
+            // If the user has requested a note to be created instead of a card, do that instead.
+            console.log("Note creation requested instead of card creation, so creating a note. Skipping existing card checks.");
+            return await createNewNote(octokit, columnId, context.payload.issue.html_url);
+        }
+        else if (cardId != null && (ignoreList == "*" || skip.includes(currentColumn))){
             // card is present in a column that we want to ignore, don't move or do anything
             return `Card exists for issue in column ${currentColumn}. Column specified to be ignored, not moving issue.`;
         }
@@ -64,6 +70,15 @@ async function run() {
         // None of the labels match what we are looking for, non-indicative of a failure though
         return `Issue #${context.payload.issue.id} does not have a label that matches ${labelName}, ignoring`;
     }
+}
+
+async function createNewNote(octokit, columnId, issueURL){
+    console.log(`Creating a note for issue ${issueURL}`);
+    await octokit.projects.createCard({
+        column_id: columnId,
+        note: `${issueURL}`
+    });
+    return `Successfully created a new note in column #${columnId} for an issue with the corresponding issue ${issueURL} !`;
 }
 
 async function createNewCard(octokit, columnId, issueId){
