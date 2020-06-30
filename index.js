@@ -21,21 +21,16 @@ async function run() {
 
     var found = false;
     if(labelName){
-        context.payload.issue.labels.forEach(function(item){
+        context.payload.pull_request.labels.forEach(function(item){
             if(labelName == item.name){
                 found = true;
             }
         });
     }
-    if(milestoneName){
-        if(context.payload.issue.milestone && context.payload.issue.milestone.title == milestoneName){
-            found = true;
-        }
-    }
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, context.payload.issue.id);
+        var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, context.payload.pull_request.id);
         var columnId = info[0];
         var cardId = info[1];
         var currentColumn = info[2];
@@ -58,29 +53,29 @@ async function run() {
         } else {
             // card is not present
             // create new card in the appropriate column
-            return await createNewCard(octokit, columnId, context.payload.issue.id);
+            return await createNewCard(octokit, columnId, context.payload.pull_request.id);
         }
     } else {
         // None of the labels match what we are looking for, non-indicative of a failure though
-        return `Issue #${context.payload.issue.id} does not have a label that matches ${labelName}, ignoring`;
+        return `Issue #${context.payload.pull_request.id} does not have a label that matches ${labelName}, ignoring`;
     }
 }
 
-async function createNewCard(octokit, columnId, issueId){
-    console.log(`No card exists for the labeled issue in the project. Attempting to create a card in column ${columnId}, for an issue with the corresponding id #${issueId}`);
+async function createNewCard(octokit, columnId, prId){
+    console.log(`No card exists for the labeled issue in the project. Attempting to create a card in column ${columnId}, for an issue with the corresponding id #${prId}`);
     await octokit.projects.createCard({
         column_id: columnId,
-        content_id: issueId,
-        content_type: "Issue"
+        content_id: prId,
+        content_type: "PullRequest"
     });
-    return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
+    return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${prId} !`;
 }
 
 async function moveExistingCard(octokit, columnId, cardId){
     console.log(`A card already exists for the issue. Attempting to move card #${cardId} to column #${columnId}`);
     await octokit.projects.moveCard({
         card_id: cardId,
-        position: "top",
+        position: "bottom",
         column_id: columnId
     });
     return `Succesfully moved card #${cardId} to column #${columnId} !`;
@@ -165,7 +160,7 @@ async function getOrgInformation(organizationLogin, projectNumber, token){
                                     node {
                                         databaseId
                                             content {
-                                                ... on Issue {
+                                                ... on PullRequest {
                                                     databaseId
                                                     number
                                                 }
@@ -208,7 +203,7 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
                                     node {
                                         databaseId
                                             content {
-                                                ... on Issue {
+                                                ... on PullRequest {
                                                     databaseId
                                                     number
                                                 }
