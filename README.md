@@ -1,12 +1,7 @@
-# Move labeled or milestoned issue
-
-### Demo
-This demo shows an issue that has the priority label added automatically get moved from column `New issues should show up here` to `Priority labeled stuff should automatically move here`.
-
-![](demo.gif)
+# Move labeled or milestoned pull request
 
 ### Use Case
-Everytime a specific label is added to an issue (or issue added to a milestone), the associated card in a project should be moved to a specific column. For example, you want any issue that gets labeled with "priority" to automatically move to the column that corresponds to "on deck". If the issue is not on the project board, it will be created in the desired column. If it has already been added, it will be moved to the correct column.
+Everytime a specific label is added to an pull request (or pull request added to a milestone), the associated card in a project should be moved to a specific column. For example, you want any pull request that gets labeled with "priority" to automatically move to the column that corresponds to "on deck". If the pull request is not on the project board, it will be created in the desired column. If it has already been added, it will be moved to the correct column.
 
 This action can be used for projects that are linked and setup at the org level or repository level. The token that is supplied though must have `repo` permissions. If the project is linked at the org level, it must also have `org:read` permissions.
 
@@ -14,12 +9,12 @@ This action can be used for projects that are linked and setup at the org level 
 
 | Input | Description  |
 |---------|---|
-|  action-token | An access token that will be used to move or create an issue in a desired column. The standard token that is present for each action will not be sufficient as it does not have sufficient privilages. You must create one that has `repo` permissions (see below)  |
+|  action-token | An access token that will be used to move or create an pull request in a desired column. The standard token that is present for each action will not be sufficient as it does not have sufficient privilages. You must create one that has `repo` permissions (see below)  |
 | project-url  | The url of the project. Will be something like `https://github.com/orgs/github/projects/1` or `https://github.com/konradpabjan/example/projects/1`  |
-| column-name | The name of the column in project that issues should be moved to |
-| label-name | The label that should trigger an issue to be moved to a specific column (mutually exclusive with milestone-name) |
-| milestone-name | The milestone that should trigger an issue to be moved to a specific column (mutually exclusive with label-name) |
-| columns-to-ignore | Comma separated list of column names that should be ignored. If an issue/card already exists in a column with one of the names, it will be ignored. Use `*` to ignore all columns. This is optional|
+| column-name | The name of the column in project that pull requests should be moved to |
+| label-name | The label that should trigger an pull request to be moved to a specific column (mutually exclusive with milestone-name) |
+| milestone-name | The milestone that should trigger an pull request to be moved to a specific column (mutually exclusive with label-name) |
+| columns-to-ignore | Comma separated list of column names that should be ignored. If an pull request/card already exists in a column with one of the names, it will be ignored. Use `*` to ignore all columns. This is optional|
 
 
 ### Creating an action-token
@@ -31,17 +26,17 @@ This action can be used for projects that are linked and setup at the org level 
 
 ### Example YAML (label)
 
-This YAML is meant to be triggered whenever an issue has been labled.
+This YAML is meant to be triggered whenever an pull request has been labled.
 
 ```
 on:
-  issues:
+  pull requests:
     types: [labeled]
 jobs:
   Move_Labeled_Issue_On_Project_Board:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+    - uses: pauldruziak/move-labeled-or-milestoned-pr@v1.0
       with:
         action-token: "${{ secrets.MY_TOKEN }}"
         project-url: "https://github.com/orgs/github/projects/1"
@@ -52,17 +47,17 @@ jobs:
 
 ### Example YAML (milestone)
 
-This YAML is meant to be triggered whenever an issue has been milestoned.
+This YAML is meant to be triggered whenever an pull request has been milestoned.
 
 ```
 on:
-  issues:
+  pull requests:
     types: [milestoned]
 jobs:
   Move_Milestoned_Issue_On_Project_Board:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+    - uses: pauldruziak/move-labeled-or-milestoned-pr@v1.0
       with:
         action-token: "${{ secrets.MY_TOKEN }}"
         project-url: "https://github.com/orgs/github/projects/1"

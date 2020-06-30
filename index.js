@@ -28,8 +28,14 @@ async function run() {
         });
     }
 
+    if(milestoneName){
+        if(context.payload.pull_request.milestone && context.payload.pull_request.milestone.title == milestoneName){
+            found = true;
+        }
+    }
+
     if(found){
-        // get the columnId for the project where the issue should be added/moved
+        // get the columnId for the project where the pull request should be added/moved
         var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, context.payload.pull_request.id);
         var columnId = info[0];
         var cardId = info[1];
@@ -41,13 +47,13 @@ async function run() {
         if (ignoreList){
             skip = ignoreList.split(",");
         }
-        
+
         if (cardId != null && (ignoreList == "*" || skip.includes(currentColumn))){
             // card is present in a column that we want to ignore, don't move or do anything
-            return `Card exists for issue in column ${currentColumn}. Column specified to be ignored, not moving issue.`;
+            return `Card exists for pull request in column ${currentColumn}. Column specified to be ignored, not moving pull request.`;
         }
         else if (cardId != null){
-            // card already exists for the issue
+            // card already exists for the pull request
             // move card to the appropriate column
             return await moveExistingCard(octokit, columnId, cardId);
         } else {
@@ -62,17 +68,17 @@ async function run() {
 }
 
 async function createNewCard(octokit, columnId, prId){
-    console.log(`No card exists for the labeled issue in the project. Attempting to create a card in column ${columnId}, for an issue with the corresponding id #${prId}`);
+    console.log(`No card exists for the labeled pull request in the project. Attempting to create a card in column ${columnId}, for an pull request with the corresponding id #${prId}`);
     await octokit.projects.createCard({
         column_id: columnId,
         content_id: prId,
         content_type: "PullRequest"
     });
-    return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${prId} !`;
+    return `Successfully created a new card in column #${columnId} for an pull request with the corresponding id:${prId} !`;
 }
 
 async function moveExistingCard(octokit, columnId, cardId){
-    console.log(`A card already exists for the issue. Attempting to move card #${cardId} to column #${columnId}`);
+    console.log(`A card already exists for the pull request. Attempting to move card #${cardId} to column #${columnId}`);
     await octokit.projects.moveCard({
         card_id: cardId,
         position: "bottom",
@@ -81,7 +87,7 @@ async function moveExistingCard(octokit, columnId, cardId){
     return `Succesfully moved card #${cardId} to column #${columnId} !`;
 }
 
-async function tryGetColumnAndCardInformation(columnName, projectUrl, token, issueDatabaseId){
+async function tryGetColumnAndCardInformation(columnName, projectUrl, token, prDatabaseId){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
     var columnId = null;
@@ -101,12 +107,12 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
             if(name == columnName){
                 columnId = columnNode.databaseId;
             }
-            // check each column if there is a card that exists for the issue
+            // check each column if there is a card that exists for the pull request
             columnNode.cards.edges.forEach(function(card){
                 // card level
                 if (card.node.content != null){
-                    // only issues and pull requests have content
-                    if(card.node.content.databaseId == issueDatabaseId){
+                    // only pull requests and pull requests have content
+                    if(card.node.content.databaseId == prDatabaseId){
                         cardId = card.node.databaseId;
                         currentColumnName = columnNode.name;
                     }
@@ -124,12 +130,12 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
             if(name == columnName){
                 columnId = columnNode.databaseId;
             }
-            // check each column if there is a card that exists for the issue
+            // check each column if there is a card that exists for the pull request
             columnNode.cards.edges.forEach(function(card){
                 // card level
                 if (card.node.content != null){
-                    // only issues and pull requests have content
-                    if(card.node.content.databaseId == issueDatabaseId){
+                    // only pull requests and pull requests have content
+                    if(card.node.content.databaseId == prDatabaseId){
                         cardId = card.node.databaseId;
                         currentColumnName = columnNode.name;
                     }
@@ -214,7 +220,7 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
                             }
                         }
                     }
-                }        
+                }
             }`, {
             ownerVariable: repositoryOwner,
             nameVariable: repositoryName,
@@ -229,8 +235,8 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
 run()
     .then(
         (response) => { console.log(`Finished running: ${response}`); },
-        (error) => { 
+        (error) => {
             console.log(`#ERROR# ${error}`);
-            process.exit(1); 
+            process.exit(1);
         }
     );
