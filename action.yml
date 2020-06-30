@@ -1,8 +1,8 @@
-name: 'Move labeled or milestoned issue to a specific project column'
-description: 'Move an newly created issue or existing issue that has been labeled or milestoned to a specific column in a project'
+name: 'Move labeled or milestoned pull request to a specific project column'
+description: 'Move an newly created pull request or existing pull request that has been labeled or milestoned to a specific column in a project'
 branding:
-  icon: 'move'  
-  color: 'yellow'
+  icon: 'move'
+  color: 'green'
 inputs:
   action-token:
     description: 'Token for the repo. The usual secrets.GITHUB_TOKEN will not be sufficient, you must create a token that has repo permissions'
@@ -14,13 +14,13 @@ inputs:
     description: 'The column that the card should end up'
     required: true
   label-name:
-    description: 'The label that specifies if an issue should be automatically moved to the column (mutually exclusive with milestone-name)'
+    description: 'The label that specifies if an pull request should be automatically moved to the column (mutually exclusive with milestone-name)'
     required: false
   milestone-name:
-    description: 'The milestone that specifies if an issue should be automatically moved to the column (mutually exclusive with label-name)'
+    description: 'The milestone that specifies if an pull request should be automatically moved to the column (mutually exclusive with label-name)'
     required: false
   columns-to-ignore:
-    description: 'Comma separated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved. Use `*` to ignore all columns'
+    description: 'Comma separated list of columns to ignore. If a card/pull request is already in one of these columns, it will not be moved. Use `*` to ignore all columns'
     required: false
 runs:
   using: 'node12'
