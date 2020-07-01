@@ -12,12 +12,15 @@ inputs:
     required: true
   column-name:
     description: 'The column that the card should end up'
-    required: true
+    required: false
   label-name:
     description: 'The label that specifies if an pull request should be automatically moved to the column (mutually exclusive with milestone-name)'
     required: false
   milestone-name:
     description: 'The milestone that specifies if an pull request should be automatically moved to the column (mutually exclusive with label-name)'
+    required: false
+  delete-card:
+    description: '"true" if you want to delete the card from the project'
     required: false
   columns-to-ignore:
     description: 'Comma separated list of columns to ignore. If a card/pull request is already in one of these columns, it will not be moved. Use `*` to ignore all columns'

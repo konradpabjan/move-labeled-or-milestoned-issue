@@ -14,6 +14,7 @@ This action can be used for projects that are linked and setup at the org level 
 | column-name | The name of the column in project that pull requests should be moved to |
 | label-name | The label that should trigger an pull request to be moved to a specific column (mutually exclusive with milestone-name) |
 | milestone-name | The milestone that should trigger an pull request to be moved to a specific column (mutually exclusive with label-name) |
+| delete-card | "true" if you want to delete the card from the project |
 | columns-to-ignore | Comma separated list of column names that should be ignored. If an pull request/card already exists in a column with one of the names, it will be ignored. Use `*` to ignore all columns. This is optional|
 
 
