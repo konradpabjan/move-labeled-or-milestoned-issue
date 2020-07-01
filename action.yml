@@ -14,7 +14,7 @@ inputs:
     description: 'The column that the card should end up'
     required: false
   label-name:
-    description: 'The label that specifies if an pull request should be automatically moved to the column (mutually exclusive with milestone-name)'. Use `*` to use it with any label
+    description: 'The label that specifies if an pull request should be automatically moved to the column (mutually exclusive with milestone-name). Use `*` to use it with any label'
     required: false
   milestone-name:
     description: 'The milestone that specifies if an pull request should be automatically moved to the column (mutually exclusive with label-name)'
