@@ -20,15 +20,15 @@ async function run() {
         throw new Error("label-name and milestone-name cannot both be set");
     }
 
-    if(deleteCard != 'true' && !columnName){
+    if(deleteCard != "true" && !columnName){
         throw new Error("one of delete-card and column-name must be set");
     }
-    else if (deleteCard == 'true' && columnName){
+    else if (deleteCard == "true" && columnName){
         throw new Error("delete-card and column-name cannot both be set");
     }
 
     var found = false;
-    if(labelName){
+    if(labelName || labelName == "*"){
         context.payload.pull_request.labels.forEach(function(item){
             if(labelName == item.name){
                 found = true;
@@ -49,11 +49,6 @@ async function run() {
         var cardId = info[1];
         var currentColumn = info[2];
         console.log(`columnId is: ${columnId}, cardId is: ${cardId}, currentColumn is: ${currentColumn}`);
-        if (deleteCard == 'true') {
-            console.log(`deleteCard is true: ${deleteCard}`)
-        } else {
-            console.log(`deleteCard is not true: ${deleteCard}`)
-        }
 
         var skip = [];
         // Check optionally specified ignoreList
@@ -67,14 +62,14 @@ async function run() {
         }
         else if (cardId != null){
             // card already exists for the pull request
-            if (deleteCard == 'true'){
+            if (deleteCard == "true"){
                 // delete card from the project
                 return await deleteExistingCard(octokit, columnId, cardId);
             } else {
                 // move card to the appropriate column
                 return await moveExistingCard(octokit, columnId, cardId);
             }
-        } else if (deleteCard != 'true') {
+        } else if (deleteCard != "true") {
             // card is not present
             // create new card in the appropriate column
             return await createNewCard(octokit, columnId, context.payload.pull_request.id);

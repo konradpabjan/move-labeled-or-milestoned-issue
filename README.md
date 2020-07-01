@@ -12,7 +12,7 @@ This action can be used for projects that are linked and setup at the org level 
 |  action-token | An access token that will be used to move or create an pull request in a desired column. The standard token that is present for each action will not be sufficient as it does not have sufficient privilages. You must create one that has `repo` permissions (see below)  |
 | project-url  | The url of the project. Will be something like `https://github.com/orgs/github/projects/1` or `https://github.com/konradpabjan/example/projects/1`  |
 | column-name | The name of the column in project that pull requests should be moved to |
-| label-name | The label that should trigger an pull request to be moved to a specific column (mutually exclusive with milestone-name) |
+| label-name | The label that should trigger an pull request to be moved to a specific column (mutually exclusive with milestone-name). Use `*` to use it with any label |
 | milestone-name | The milestone that should trigger an pull request to be moved to a specific column (mutually exclusive with label-name) |
 | delete-card | "true" if you want to delete the card from the project |
 | columns-to-ignore | Comma separated list of column names that should be ignored. If an pull request/card already exists in a column with one of the names, it will be ignored. Use `*` to ignore all columns. This is optional|
