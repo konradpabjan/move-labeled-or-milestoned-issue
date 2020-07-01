@@ -28,7 +28,9 @@ async function run() {
     }
 
     var found = false;
-    if(labelName || labelName == "*"){
+    if (labelName == "*"){
+        found = true;
+    } else if(labelName){
         context.payload.pull_request.labels.forEach(function(item){
             if(labelName == item.name){
                 found = true;
@@ -76,7 +78,7 @@ async function run() {
         }
     } else {
         // None of the labels match what we are looking for, non-indicative of a failure though
-        return `Issue #${context.payload.pull_request.id} does not have a label that matches ${labelName}, ignoring`;
+        return `Pull request #${context.payload.pull_request.id} does not have a label that matches ${labelName}, ignoring`;
     }
 }
 
