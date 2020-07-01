@@ -49,6 +49,11 @@ async function run() {
         var cardId = info[1];
         var currentColumn = info[2];
         console.log(`columnId is: ${columnId}, cardId is: ${cardId}, currentColumn is: ${currentColumn}`);
+        if (deleteCard == 'true') {
+            console.log(`deleteCard is true: ${deleteCard}`)
+        } else {
+            console.log(`deleteCard is not true: ${deleteCard}`)
+        }
 
         var skip = [];
         // Check optionally specified ignoreList
