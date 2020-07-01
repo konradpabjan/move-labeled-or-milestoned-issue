@@ -1,5 +1,5 @@
 name: 'Move labeled or milestoned pull request to a specific project column'
-description: 'Move an newly created pull request or existing pull request that has been labeled or milestoned to a specific column in a project'
+description: 'Move pull request that has been labeled or milestoned to a specific column in a project'
 branding:
   icon: 'move'
   color: 'green'
