@@ -96,7 +96,7 @@ async function moveExistingCard(octokit, columnId, cardId){
     console.log(`A card already exists for the pull request. Attempting to move card #${cardId} to column #${columnId}`);
     await octokit.projects.moveCard({
         card_id: cardId,
-        position: "bottom",
+        position: "top",
         column_id: columnId
     });
     return `Succesfully moved card #${cardId} to column #${columnId} !`;
