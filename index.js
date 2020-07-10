@@ -20,22 +20,34 @@ async function run() {
     }
 
     var found = false;
-    if(labelName){
-        context.payload.issue.labels.forEach(function(item){
+    var objectType;
+    var baseObject;
+
+    if (context.payload.issue) {
+        baseObject = context.payload.issue;
+        objectType = "Issue";
+    } else if (context.payload.pull_request) {
+        baseObject = context.payload.pull_request;
+        objectType = "PullRequest";
+    }
+
+    if(baseObject && labelName){
+        baseObject.labels.forEach(function(item){
             if(labelName == item.name){
                 found = true;
             }
         });
     }
-    if(milestoneName){
-        if(context.payload.issue.milestone && context.payload.issue.milestone.title == milestoneName){
+
+    if(baseObject && milestoneName){
+        if(baseObject.milestone && baseObject.milestone.title == milestoneName){
             found = true;
         }
     }
 
     if(found){
         // get the columnId for the project where the issue should be added/moved
-        var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, context.payload.issue.id);
+        var info = await tryGetColumnAndCardInformation(columnName, projectUrl, myToken, baseObject.id);
         var columnId = info[0];
         var cardId = info[1];
         var currentColumn = info[2];
@@ -58,22 +70,22 @@ async function run() {
         } else {
             // card is not present
             // create new card in the appropriate column
-            return await createNewCard(octokit, columnId, context.payload.issue.id);
+            return await createNewCard(octokit, columnId, baseObject.id, objectType);
         }
     } else {
         // None of the labels match what we are looking for, non-indicative of a failure though
-        return `Issue #${context.payload.issue.id} does not have a label that matches ${labelName}, ignoring`;
+        return `Issue/PR #${baseObject.id} does not have a label that matches ${labelName}, ignoring`;
     }
 }
 
-async function createNewCard(octokit, columnId, issueId){
-    console.log(`No card exists for the labeled issue in the project. Attempting to create a card in column ${columnId}, for an issue with the corresponding id #${issueId}`);
+async function createNewCard(octokit, columnId, issueOrPrId, objectType){
+    console.log(`No card exists for the labeled ${objectType} in the project. Attempting to create a card in column ${columnId}, for the ${objectType} with the corresponding id #${issueOrPrId}`);
     await octokit.projects.createCard({
         column_id: columnId,
-        content_id: issueId,
-        content_type: "Issue"
+        content_id: issueOrPrId,
+        content_type: objectType
     });
-    return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
+    return `Successfully created a new card in column #${columnId} for the ${objectType} with the corresponding id:${issueOrPrId} !`;
 }
 
 async function moveExistingCard(octokit, columnId, cardId){
@@ -86,7 +98,7 @@ async function moveExistingCard(octokit, columnId, cardId){
     return `Succesfully moved card #${cardId} to column #${columnId} !`;
 }
 
-async function tryGetColumnAndCardInformation(columnName, projectUrl, token, issueDatabaseId){
+async function tryGetColumnAndCardInformation(columnName, projectUrl, token, issueOrPrDatabaseId){
     // if org project, we need to extract the org name
     // if repo project, need repo owner and name
     var columnId = null;
@@ -111,7 +123,7 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
                 // card level
                 if (card.node.content != null){
                     // only issues and pull requests have content
-                    if(card.node.content.databaseId == issueDatabaseId){
+                    if(card.node.content.databaseId == issueOrPrDatabaseId){
                         cardId = card.node.databaseId;
                         currentColumnName = columnNode.name;
                     }
@@ -134,7 +146,7 @@ async function tryGetColumnAndCardInformation(columnName, projectUrl, token, iss
                 // card level
                 if (card.node.content != null){
                     // only issues and pull requests have content
-                    if(card.node.content.databaseId == issueDatabaseId){
+                    if(card.node.content.databaseId == issueOrPrDatabaseId){
                         cardId = card.node.databaseId;
                         currentColumnName = columnNode.name;
                     }
@@ -166,6 +178,10 @@ async function getOrgInformation(organizationLogin, projectNumber, token){
                                         databaseId
                                             content {
                                                 ... on Issue {
+                                                    databaseId
+                                                    number
+                                                }
+                                                ... on PullRequest {
                                                     databaseId
                                                     number
                                                 }
@@ -209,6 +225,10 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
                                         databaseId
                                             content {
                                                 ... on Issue {
+                                                    databaseId
+                                                    number
+                                                }
+                                                ... on PullRequest {
                                                     databaseId
                                                     number
                                                 }
