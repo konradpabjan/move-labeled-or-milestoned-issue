@@ -23,5 +23,5 @@ inputs:
     description: 'Comma separated list of columns to ignore. If a card/issue is already in one of these columns, it will not be moved. Use `*` to ignore all columns'
     required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'index.js'
